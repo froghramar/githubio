@@ -1,22 +1,49 @@
 import * as React from 'react';
-import './App.css';
+import {
+    BrowserRouter as Router,
+    Route,
+    Link
+} from 'react-router-dom';
 
-const logo = require('./logo.svg');
+const PEEPS = [
+    { id: 0, name: 'Michelle', friends: [ 1, 2, 3 ] },
+    { id: 1, name: 'Sean', friends: [ 0, 3 ] },
+    { id: 2, name: 'Kim', friends: [ 0, 1, 3 ], },
+    { id: 3, name: 'David', friends: [ 1, 2 ] }
+];
 
-class App extends React.Component {
-    render() {
-        return (
-            <div className="App">
-                <div className="App-header">
-                    <img src={logo} className="App-logo" alt="logo" />
-                    <h2>Welcome to React</h2>
-                </div>
-                <p className="App-intro">
-                    To get started, edit <code>src/App.tsx</code> and save to reload.
-                </p>
-            </div>
-        );
-    }
+function find(id: number): any {
+    return PEEPS.find(p => p.id == id);
+}
+
+function App() {
+    return (
+        <Router>
+            <Person match={{params: {id: 0}, url: ''}}/>
+        </Router>
+    );
+}
+
+function Person(props: any) : any {
+
+    const match = props.match;
+    const person: any = find(match.params.id);
+
+    return (
+        <div>
+            <h3>{person.name}’s Friends</h3>
+            <ul>
+                {person.friends.map((id: number) => (
+                    <li key={id}>
+                        <Link to={`${match.url}/${id}`}>
+                            { find(id).name }
+                        </Link>
+                    </li>
+                ))}
+            </ul>
+            <Route path={`${match.url}/:id`} component={Person}/>
+        </div>
+    );
 }
 
 export default App;
