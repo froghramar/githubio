@@ -8,12 +8,12 @@ import {
 const PEEPS = [
     { id: 0, name: 'Michelle', friends: [ 1, 2, 3 ] },
     { id: 1, name: 'Sean', friends: [ 0, 3 ] },
-    { id: 2, name: 'Kim', friends: [ 0, 1, 3 ], },
+    { id: 2, name: 'Kim', friends: [ 0, 1, 3 ] },
     { id: 3, name: 'David', friends: [ 1, 2 ] }
 ];
 
 function find(id: number): any {
-    return PEEPS.find(p => p.id == id);
+    return PEEPS.find((p: any) => p.id === id);
 }
 
 function App() {
@@ -24,26 +24,33 @@ function App() {
     );
 }
 
-function Person(props: any) : any {
+class Person extends React.Component <any, any> {
 
-    const match = props.match;
-    const person: any = find(match.params.id);
+    constructor(props: any) {
+        super(props);
+    }
 
-    return (
-        <div>
-            <h3>{person.name}’s Friends</h3>
-            <ul>
-                {person.friends.map((id: number) => (
-                    <li key={id}>
-                        <Link to={`${match.url}/${id}`}>
-                            { find(id).name }
-                        </Link>
-                    </li>
-                ))}
-            </ul>
-            <Route path={`${match.url}/:id`} component={Person}/>
-        </div>
-    );
+    render(): any {
+
+        const match = this.props.match;
+        const person: any = find(+match.params.id);
+
+        return (
+            <div>
+                <h3>{person.name}’s Friends</h3>
+                <ul>
+                    {person.friends.map((id: number) => (
+                        <li key={id}>
+                            <Link to={`${match.url}/${id}`}>
+                                {find(id).name}
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+                <Route path={`${match.url}/:id`} component={Person}/>
+            </div>
+        );
+    }
 }
 
 export default App;
